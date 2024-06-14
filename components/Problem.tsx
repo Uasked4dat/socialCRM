@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 const Arrow = ({ extraStyle }: { extraStyle: string }) => {
   return (
     <svg
@@ -47,7 +49,7 @@ const Problem = () => {
           Effortlessly manage and enhance your personal relationships
         </h2>
         <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20">
-        In today's fast-paced, globally connected world, effortlessly manage and enhance your personal relationships by keeping track of conversations, remembering important details, and staying connected across distances, eliminating the inefficiencies of traditional methods.
+        In today&apos;s fast-paced, globally connected world, effortlessly manage and enhance your personal relationships by keeping track of conversations, remembering important details, and staying connected across distances, eliminating the inefficiencies of traditional methods.
         </p>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
