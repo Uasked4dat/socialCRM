@@ -33,9 +33,10 @@ const ButtonLead = ({ extraStyle }: { extraStyle?: string }) => {
       setIsLoading(false);
     }
   };
-  return (
+return (
+  <div className="w-full flex justify-center bg-neutral">
     <form
-      className={`w-full max-w-xs space-y-3 ${extraStyle ? extraStyle : ""}`}
+      className={`flex flex-col items-center w-full max-w-md space-y-3 py-10  ${extraStyle ? extraStyle : ""}`}
       onSubmit={handleSubmit}
     >
       <input
@@ -73,7 +74,8 @@ const ButtonLead = ({ extraStyle }: { extraStyle?: string }) => {
         )}
       </button>
     </form>
-  );
+  </div>
+);
 };
 
 export default ButtonLead;
