@@ -4,6 +4,7 @@ import Problem from "@/components/Problem";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import ButtonLead from '@/components/ButtonLead';
+import Pricing from '@/components/Pricing';
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <FAQ />
       </main>
       <ButtonLead />
+      <Pricing />
       <Footer />
     </>
   );
