@@ -8,7 +8,7 @@ const config = {
   appDescription:
     "The app that lets you remember important things about your friends.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
-  domainName: "simpleconnect.app ",
+  domainName: "simpleconnect.app",
   stripe: {
     // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
     plans: [
