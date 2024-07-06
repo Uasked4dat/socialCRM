@@ -25,7 +25,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" data-theme={config.colors.theme} className={font.className}>
       {config.domainName && (
         <head>
-          <PlausibleProvider domain={config.domainName} />
+          {config.domainName && <PlausibleProvider domain={config.domainName} />}
+          <link rel="icon" href="/favicon.ico" />
         </head>
       )}
       <body>

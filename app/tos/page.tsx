@@ -57,39 +57,34 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Last Updated: July 1, 2024
 
-Welcome to ShipFast!
+**1. Introduction**
+Welcome to SimpleConnect! By using our website, https://simpleconnect.app, you agree to comply with and be bound by the following terms and conditions.
 
-These Terms of Service ("Terms") govern your use of the ShipFast website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+**2. Description of Service**
+SimpleConnect is a social CRM that allows individuals to keep track of their personal connections.
 
-1. Description of ShipFast
+**3. Ownership and Usage**
+When you purchase a package from SimpleConnect, you are granted the right to use the app as you wish. However, you do not have the right to resell the product. You can request a full refund within 7 days of purchase.
 
-ShipFast is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+**4. Information We Collect**
+- **Personal Data**: We collect your name, email address, and payment information.
+- **Non-Personal Data**: We collect web cookies to enhance your browsing experience.
 
-2. Ownership and Usage Rights
+**5. Privacy Policy**
+Please refer to our Privacy Policy for details on how we handle your information: [Privacy Policy](http://simpleconnect.app/privacy-policy).
 
-When you purchase a package from ShipFast, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+**6. Governing Law**
+These terms and conditions are governed by the laws of Hong Kong.
 
-3. User Data and Privacy
+**7. Updates to These Terms**
+We may update these Terms & Services from time to time. You will be notified of any changes via email.
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+**8. Contact Us**
+If you have any questions or concerns about these Terms & Services, please contact us at brianlok2002@gmail.com.
 
-4. Non-Personal Data Collection
-
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
-
-5. Governing Law
-
-These Terms are governed by the laws of France.
-
-6. Updates to the Terms
-
-We may update these Terms from time to time. Users will be notified of any changes via email.
-
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
-
-Thank you for using ShipFast!`}
+Thank you for using SimpleConnect.`}
         </pre>
       </div>
     </main>
