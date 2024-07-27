@@ -82,17 +82,17 @@ const Testimonial = ({ i }: { i: number }) => {
 
 const Testimonials3 = () => {
   return (
-    <section id="testimonials">
+    <section id="testimonials" className="bg-neutral">
       <div className="py-24 px-8 max-w-7xl mx-auto">
         <div className="flex flex-col text-center w-full mb-20">
           <div className="mb-8">
             <h2 className="sm:text-5xl text-4xl font-extrabold text-base-content">
-              212 makers are already shipping faster!
+              212 travellers are already offloading their memory!
             </h2>
           </div>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-base-content/80">
             Don&apos;t take our word for it. Here&apos;s what they have to say
-            about ShipFast.
+            about SimpleConnect.
           </p>
         </div>
 

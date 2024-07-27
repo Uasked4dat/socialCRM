@@ -43,25 +43,29 @@ const Step = ({ emoji, text }: { emoji: string; text: string }) => {
 // - Features: "ShipFast has user auth, Stripe, emails all set up for you"
 const Problem = () => {
   return (
-    <section className="bg-neutral text-neutral-content">
+    <section className="bg-neutral text-base-content">
       <div className="max-w-7xl mx-auto px-8 py-16 md:py-32 text-center">
-        <h2 className="max-w-3xl mx-auto font-extrabold text-4xl md:text-5xl tracking-tight mb-6 md:mb-8">
-          Effortlessly manage and enhance your personal relationships
+        <h2 className="max-w-4xl mx-auto font-extrabold text-4xl md:text-5xl tracking-tight mb-6 md:mb-8">
+          A social companion designed for digital nomads and travellers.
         </h2>
-        <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20">
-        In today&apos;s fast-paced, globally connected world, effortlessly manage and enhance your personal relationships by keeping track of conversations, remembering important details, and staying connected across distances, eliminating the inefficiencies of traditional methods.
+        <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20 text-base-content">
+          Has this happened to you before?
         </p>
 
-        <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
-          <Step emoji="🧑‍💻" text="8 hrs to add Stripe" />
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 text-base-content">
+          <Step emoji="🥳" text="Clicking with interesting people on the road" />
 
           <Arrow extraStyle="max-md:-scale-x-100 md:-rotate-90" />
 
-          <Step emoji="😮‍💨" text="Struggle to find time" />
+          <Step emoji="😮‍💨" text="Not seeing them again for months-years on end" />
 
           <Arrow extraStyle="md:-scale-x-100 md:-rotate-90" />
 
-          <Step emoji="😔" text="Quit project" />
+          <Step emoji="😔" text="Forgotten most of what you've talked about" />
+
+          <Arrow extraStyle="max-md:-scale-x-100 md:-rotate-90" />
+
+          <Step emoji="🙀" text="Basically starting from 0 when you see them again" />
         </div>
       </div>
     </section>

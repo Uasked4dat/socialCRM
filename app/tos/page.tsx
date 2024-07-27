@@ -59,29 +59,29 @@ const TOS = () => {
         >
           {`Last Updated: July 1, 2024
 
-**1. Introduction**
+1. Introduction
 Welcome to SimpleConnect! By using our website, https://simpleconnect.app, you agree to comply with and be bound by the following terms and conditions.
 
-**2. Description of Service**
+2. Description of Service
 SimpleConnect is a social CRM that allows individuals to keep track of their personal connections.
 
-**3. Ownership and Usage**
+3. Ownership and Usage
 When you purchase a package from SimpleConnect, you are granted the right to use the app as you wish. However, you do not have the right to resell the product. You can request a full refund within 7 days of purchase.
 
-**4. Information We Collect**
-- **Personal Data**: We collect your name, email address, and payment information.
-- **Non-Personal Data**: We collect web cookies to enhance your browsing experience.
+4. Information We Collect
+- Personal Data: We collect your name, email address, and payment information.
+- Non-Personal Data: We collect web cookies to enhance your browsing experience.
 
-**5. Privacy Policy**
+5. Privacy Policy
 Please refer to our Privacy Policy for details on how we handle your information: [Privacy Policy](http://simpleconnect.app/privacy-policy).
 
-**6. Governing Law**
+6. Governing Law
 These terms and conditions are governed by the laws of Hong Kong.
 
-**7. Updates to These Terms**
+7. Updates to These Terms
 We may update these Terms & Services from time to time. You will be notified of any changes via email.
 
-**8. Contact Us**
+8. Contact Us
 If you have any questions or concerns about these Terms & Services, please contact us at brianlok2002@gmail.com.
 
 Thank you for using SimpleConnect.`}

@@ -5,6 +5,9 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import ButtonLead from '@/components/ButtonLead';
 import Pricing from '@/components/Pricing';
+import Testimonials3 from '@/components/Testimonials3';
+import Hero from '@/components/Hero';
+import WithWithout from '@/components/WithWithout';
 
 export default function Home() {
   return (
@@ -13,10 +16,12 @@ export default function Home() {
         <Header />
       </Suspense>
       <main>
+        <Hero />
         <Problem />
+        <WithWithout />
         <FAQ />
       </main>
-      <ButtonLead />
+      <Testimonials3 />
       <Pricing />
       <Footer />
     </>
