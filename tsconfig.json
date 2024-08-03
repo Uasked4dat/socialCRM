@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/MapboxExample.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -14,7 +14,7 @@ interface FAQItemProps {
 const faqList: FAQItemProps[] = [
   {
     question: "What do I get exactly?",
-    answer: <div className="space-y-2 leading-relaxed">Loreum Ipseum</div>,
+    answer: <div className="space-y-2 leading-relaxed">Full lifetime access to the SimpleConnect app.</div>,
   },
   {
     question: "Can I get a refund?",
@@ -28,7 +28,7 @@ const faqList: FAQItemProps[] = [
   {
     question: "I have another question",
     answer: (
-      <div className="space-y-2 leading-relaxed">Cool, contact us by email.</div>
+      <div className="space-y-2 leading-relaxed">Please contact us by email, we will reply as soon as possible.</div>
     ),
   },
 ];
