@@ -2,6 +2,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import Link from "next/link";
 import Map from "@/components/Map";
 import Calendar from "@/components/Calendar";
+import ThemeController from "@/components/ThemeController";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
+            <ThemeController />
             <ButtonAccount />
           </ul>
         </div>
