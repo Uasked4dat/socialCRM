@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 const ButtonAdd = () => {
   return (
@@ -15,7 +16,7 @@ const ButtonAdd = () => {
           strokeWidth="2"
           d="M12 4v16m8-8H4" />
       </svg>
-      Add Friend
+      <Link href={"/dashboard/new"}>Add Friend</Link>
     </button>
   )
 }
