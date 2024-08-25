@@ -2,7 +2,7 @@ import React from 'react'
 
 const ThemeController = () => {
   return (
-    <div className='m-auto'>
+    <div className='mr-3'>
         <label className="grid cursor-pointer place-items-center">
   <input
     type="checkbox"

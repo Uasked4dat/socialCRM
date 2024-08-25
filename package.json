@@ -11,17 +11,24 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^1.0.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@headlessui/react": "^1.7.18",
     "@lemonsqueezy/lemonsqueezy.js": "^3.2.0",
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
+    "@mui/material": "^5.16.7",
+    "@mui/x-date-pickers": "^7.14.0",
     "@next/mdx": "^13.5.6",
     "@types/mapbox-gl": "^3.4.0",
     "@vercel/postgres": "^0.9.0",
     "axios": "^1.6.8",
     "crisp-sdk-web": "^1.0.22",
+    "dayjs": "^1.11.13",
     "eslint": "8.47.0",
-    "eslint-config-next": "13.4.19",
+    "eslint-config-next": "^0.2.4",
+    "flowbite": "^2.5.1",
+    "flowbite-react": "^0.10.1",
     "form-data": "^4.0.0",
     "mailgun.js": "^9.4.1",
     "mapbox-gl": "^3.5.2",
@@ -30,7 +37,7 @@
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
     "next-plausible": "^3.12.0",
-    "next-sitemap": "^4.2.3",
+    "next-sitemap": "^4.0.9",
     "nextjs-toploader": "^1.6.11",
     "nodemailer": "^6.9.13",
     "pg": "^8.12.0",
@@ -44,7 +51,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^28.1.6",
     "@types/mdx": "^2.0.12",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.12.2",
@@ -54,7 +61,7 @@
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.10.1",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^3.2.0",
     "typescript": "^5.4.3"
   }
 }
