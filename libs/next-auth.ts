@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptionsExtended = {
     },
   },
   session: {
-    strategy: "jwt",
+    strategy: "jwt", // uses web tokens here, but you can also use database sessions (not compatible with social media providers).
   },
   theme: {
     brandColor: config.colors.main,

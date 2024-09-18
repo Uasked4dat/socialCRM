@@ -8,17 +8,22 @@ import { Dayjs } from 'dayjs';
 export default function MyDatePicker() {
   const [value, setValue] = React.useState<Dayjs | null>(null);
 
+  const printToConsole = (newValue: Dayjs | null) => {
+    console.log(newValue?.format('YYYY-MM-DD'));
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         value={value}
         onChange={(newValue: Dayjs | null) => {
           setValue(newValue);
+          printToConsole(newValue);
         }}
         sx={{
           '& .MuiInputBase-input': {
             backgroundColor: 'oklch(var(--b1))',
-            padding: '16px',
+            padding: '12px',
             borderRadius: 'var(--rounded-btn)',
           },
           '& .MuiInputBase-input::placeholder': {

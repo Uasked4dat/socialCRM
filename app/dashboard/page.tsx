@@ -14,11 +14,13 @@ export const dynamic = "force-dynamic";
 
 export default function Dashboard() {
   return (
-    <main className="min-h-screen px-8 pb-24">
+    <main className="min-h-screen px-8 pb-12">
       <NavBar />
       <section className="h-[calc(100vh-5rem)] w-10/12 mx-auto">
-        <MyDatePicker />
-        <ButtonAdd />
+        <div className="flex justify-between">
+          <ButtonAdd />
+          <MyDatePicker />
+        </div>
         <Map />
       </section>
     </main>
