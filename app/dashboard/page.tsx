@@ -3,6 +3,7 @@ import Map from "@/components/Map";
 import ButtonAdd from "@/components/ButtonAdd";
 import NavBar from "@/components/NavBar";
 import MyDatePicker from "@/components/MyDatePicker";
+import JournalPage from "@/components/Dashboard";
 
 export const dynamic = "force-dynamic";
 
@@ -14,15 +15,10 @@ export const dynamic = "force-dynamic";
 
 export default function Dashboard() {
   return (
-    <main className="min-h-screen px-8 pb-12">
+    <main className="min-h-screen px-6 pb-12">
       <NavBar />
-      <section className="h-[calc(100vh-5rem)] w-10/12 mx-auto">
-        <div className="flex justify-between">
-          <ButtonAdd />
-          <MyDatePicker />
-        </div>
-        <Map />
-      </section>
+      <JournalPage />
+      
     </main>
   );
 }

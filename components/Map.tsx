@@ -25,12 +25,23 @@ const Map = () => {
         container: mapContainer.current, // Reference to the map container
         style: 'mapbox://styles/mapbox/dark-v11', // Map style
         center: [-74.5, 40], // Initial map center [longitude, latitude]
-        zoom: 9 // Initial map zoom level
+        zoom: 3 // Initial map zoom level (reduced to show more area)
       });
 
-    const marker = new mapboxgl.Marker() // initialize a new marker  
-      .setLngLat([-74.5, 40]) // Marker [lng, lat] coordinates  
-      .addTo(map.current); // Add the marker to the map
+      // Add multiple markers
+      const markers = [
+        { lngLat: [-74.5, 40], color: "#FF0000" },    // New York (red)
+        { lngLat: [-122.4194, 37.7749], color: "#00FF00" }, // San Francisco (green)
+        { lngLat: [-87.6298, 41.8781], color: "#0000FF" },  // Chicago (blue)
+        { lngLat: [-95.3698, 29.7604], color: "#FFFF00" },  // Houston (yellow)
+      ];
+
+      markers.forEach(({ lngLat, color }) => {
+        new mapboxgl.Marker({ color })
+          .setLngLat(lngLat as [number, number])
+          .addTo(map.current);
+      });
+
     }, []); // Empty dependency array ensures this effect runs only once
   
     return <div ref={mapContainer} className="w-full h-full"/>; // Map container div
