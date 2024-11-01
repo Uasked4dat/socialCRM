@@ -7,17 +7,19 @@ const ContactsTable: React.FC = () => {
     const [newContact, setNewContact] = useState({ name: '', information: '' });
     const [selectedContact, setSelectedContact] = useState<{ name: string; information: string } | null>(null);
 
+    // Separate the fetchContacts function to be used in both initial load and refreshing after adding a contact
+    const fetchContacts = async () => {
+        try {
+            const response = await fetch('/api/contacts');
+            const data = await response.json();
+            setContacts(data.contacts);
+        } catch (error) {
+            console.error('Error fetching contacts:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchContacts = async () => {
-            try {
-                const response = await fetch('/api/contacts');
-                const data = await response.json();
-                setContacts(data.contacts);
-            } catch (error) {
-                console.error('Error fetching contacts:', error);
-            }
-        };
-        fetchContacts();
+        fetchContacts(); // Initial load
     }, []);
 
     const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -38,8 +40,7 @@ const ContactsTable: React.FC = () => {
                 body: JSON.stringify(newContact),
             });
             if (response.ok) {
-                const data = await response.json();
-                setContacts([...contacts, data.contact]);
+                await fetchContacts(); // Refresh contacts after adding a new one
                 setNewContact({ name: '', information: '' });
                 toggleModal();
             } else {
@@ -91,7 +92,7 @@ const ContactsTable: React.FC = () => {
                                         <td>
                                             <button
                                                 onClick={() => handleContactClick(contact)}
-                                                className="text-primary hover:text-primary-focus font-semibold" // DaisyUI colors
+                                                className="text-primary hover:text-primary-focus font-semibold"
                                             >
                                                 {contact.name}
                                             </button>

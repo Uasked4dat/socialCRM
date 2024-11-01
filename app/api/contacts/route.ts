@@ -37,10 +37,11 @@ export async function GET() {
   }
 }
 
-// Handle POST requests to add a new contact
+// Handle POST requests to add or update a contact
+// Handle POST requests to add or update a contact
 export async function POST(req: NextRequest) {
   try {
-    const { name, information } = await req.json();
+    const { name, information } = await req.json(); // Expect information as a string
 
     if (!name || typeof name !== 'string' || !information || typeof information !== 'string') {
       return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
@@ -49,18 +50,26 @@ export async function POST(req: NextRequest) {
     // Connect to MongoDB
     await connectMongo();
 
-    // Create a new contact entry
-    const newContact = new Contact({ name, information });
+    // Check if a contact with the same name already exists
+    let contact = await Contact.findOne({ name });
 
-    // Save the contact entry to the database
-    await newContact.save();
+    if (contact) {
+      // Append new information to existing information
+      contact.information = `${contact.information}, ${information}`;
+      await contact.save();
+    } else {
+      // Create a new contact if none exists with this name
+      contact = new Contact({ name, information });
+      await contact.save();
+    }
 
-    return NextResponse.json({ message: 'Contact added successfully', contact: newContact }, { status: 201 });
+    return NextResponse.json({ message: 'Contact processed successfully', contact }, { status: 201 });
   } catch (error) {
-    console.error('Error adding contact:', error);
+    console.error('Error adding or updating contact:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
+
 
 // Handle DELETE requests to delete a contact by ID
 export async function DELETE(req: NextRequest) {
