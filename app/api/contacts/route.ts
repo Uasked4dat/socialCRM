@@ -28,9 +28,9 @@ export async function GET() {
     await connectMongo();
 
     // Retrieve all contacts
-    const contacts = await Contact.find().sort({ createdAt: -1 }); // Sorting by created date, newest first
+    const contacts = await Contact.find();
 
-    return NextResponse.json({ contacts }, { status: 200 });
+    return NextResponse.json({ contacts });
   } catch (error) {
     console.error('Error fetching contacts:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
@@ -39,13 +39,13 @@ export async function GET() {
 
 // Handle POST requests to add a new contact
 export async function POST(req: NextRequest) {
-  const { name, information } = await req.json();
-
-  if (!name || typeof name !== 'string' || !information || typeof information !== 'string') {
-    return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
-  }
-
   try {
+    const { name, information } = await req.json();
+
+    if (!name || typeof name !== 'string' || !information || typeof information !== 'string') {
+      return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
+    }
+
     // Connect to MongoDB
     await connectMongo();
 
@@ -58,6 +58,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'Contact added successfully', contact: newContact }, { status: 201 });
   } catch (error) {
     console.error('Error adding contact:', error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Handle DELETE requests to delete a contact by ID
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    if (!id || typeof id !== 'string') {
+      return NextResponse.json({ message: 'Invalid ID' }, { status: 400 });
+    }
+
+    // Connect to MongoDB
+    await connectMongo();
+
+    // Delete the contact entry by ID
+    const result = await Contact.findByIdAndDelete(id);
+
+    if (!result) {
+      return NextResponse.json({ message: 'Contact not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Contact deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting contact:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
