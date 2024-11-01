@@ -4,7 +4,7 @@ import ButtonAccount from './ButtonAccount';
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-secondary rounded-lg p-4 mt-6">
+    <div className="navbar bg-primary-content rounded-lg p-4 mt-6">
       <div className="navbar-start">
         <Link href="/dashboard" className="text-3xl">
           Dashboard

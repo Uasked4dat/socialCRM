@@ -78,7 +78,7 @@ const ContactsTable: React.FC = () => {
     return (
         <div className="container mx-auto flex flex-col items-center min-h-screen">
             <div className="w-full relative">
-                <div className="bg-base-100 p-6 rounded-xl shadow-lg flex flex-col pb-20">
+                <div className="bg-base-100 pr-4 pt-4 rounded-xl shadow-lg flex flex-col pb-20">
                     <div className="overflow-x-auto">
                         <table className="table w-full">
                             <thead>
@@ -115,7 +115,7 @@ const ContactsTable: React.FC = () => {
                         </table>
                     </div>
                     <button
-                        className="btn btn-primary absolute bottom-4 right-6"
+                        className="btn btn-primary absolute bottom-4 right-4"
                         onClick={toggleModal}
                     >
                         Add Contact

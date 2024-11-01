@@ -6,9 +6,20 @@ const QuickAdd: React.FC = () => {
 
   const handleQuickAdd = async () => {
     if (!entry.trim()) return;
+
+    // Base prompt to provide context for the model
+    const basePrompt = "Extract the names of people I interacted with and provide a list of facts about a specific person in an array.";
+
     try {
-      // Send the quick add information to the LLM backend for processing
-      await axios.post('/api/person', { content: entry });
+      // Concatenate the base prompt with the user entry
+      const fullPrompt = `${basePrompt}\n\n${entry}`;
+
+      // Send the concatenated prompt to the Google Gemini backend for processing
+      const response = await axios.post('/api/contacts/generate', { prompt: fullPrompt });
+      
+      // Assuming the API returns the structured JSON content in 'structuredResponse' field
+      console.log('Generated Content:', JSON.stringify(response.data.structuredResponse, null, 2)); // Pretty-print JSON
+  
       setEntry('');
     } catch (error) {
       console.error('Error adding quick entry:', error);
@@ -18,9 +29,9 @@ const QuickAdd: React.FC = () => {
   return (
     <div className="container mx-auto flex flex-col items-center min-h-screen">
       <div className="w-full">
-        <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-6 flex flex-col">
+        <div className="bg-base-100 rounded-xl shadow-lg p-4 mb-6 flex flex-col">
           <textarea
-            className="textarea textarea-bordered w-full mb-4 resize-none"
+            className="textarea textarea-bordered w-full mb-4 resize-none h-32"
             placeholder="Quickly add information about a person..."
             value={entry}
             onChange={(e) => setEntry(e.target.value)}
