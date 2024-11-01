@@ -16,8 +16,8 @@ const QuickAdd: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 flex flex-col items-center min-h-screen">
-      <div className="w-full max-w-2xl">
+    <div className="container mx-auto flex flex-col items-center min-h-screen">
+      <div className="w-full">
         <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-6 flex flex-col">
           <textarea
             className="textarea textarea-bordered w-full mb-4 resize-none"
