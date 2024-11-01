@@ -1,30 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const QuickAdd: React.FC = () => {
   const [entry, setEntry] = useState<string>('');
+  const [contacts, setContacts] = useState([]);
+
+  // Fetch all contacts on component load
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get('/api/contacts');
+        setContacts(response.data.contacts);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+      }
+    };
+    fetchContacts();
+  }, []);
 
   const handleQuickAdd = async () => {
     if (!entry.trim()) return;
-
-    // Base prompt to provide context for the model
-    const basePrompt = "Extract the names of people I interacted with and provide a list of facts about a specific person in an array.";
-
-    try {
-      // Concatenate the base prompt with the user entry
-      const fullPrompt = `${basePrompt}\n\n${entry}`;
-
-      // Send the concatenated prompt to the Google Gemini backend for processing
-      const response = await axios.post('/api/contacts/generate', { prompt: fullPrompt });
-      
-      // Assuming the API returns the structured JSON content in 'structuredResponse' field
-      console.log('Generated Content:', JSON.stringify(response.data.structuredResponse, null, 2)); // Pretty-print JSON
   
-      setEntry('');
+    const basePrompt = "Extract the names of people I interacted with and provide a list of facts about a specific person in an array.";
+    const fullPrompt = `${basePrompt}\n\n${entry}`;
+  
+    try {
+      const response = await axios.post('/api/contacts/generate', { prompt: fullPrompt });
+      const structuredResponse = response.data.structuredResponse;
+  
+      for (const person of structuredResponse) {
+        const { name, content: factoids } = person;
+        const newInformation = factoids.join(', ');
+  
+        const existingContact = contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase());
+  
+        await axios.post('/api/contacts', { name, information: newInformation });
+      }
+  
+      setEntry(''); // Clear input after processing
+  
+      // Force a full page reload to refresh contacts
+      window.location.reload();
+  
     } catch (error) {
       console.error('Error adding quick entry:', error);
     }
   };
+  
 
   return (
     <div className="container mx-auto flex flex-col items-center min-h-screen">
