@@ -5,8 +5,8 @@ const ContactsTable: React.FC = () => {
     const [contacts, setContacts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newContact, setNewContact] = useState({ name: '', information: '' });
+    const [selectedContact, setSelectedContact] = useState<{ name: string; information: string } | null>(null);
 
-    // Fetch contacts from the API
     useEffect(() => {
         const fetchContacts = async () => {
             try {
@@ -20,18 +20,13 @@ const ContactsTable: React.FC = () => {
         fetchContacts();
     }, []);
 
-    // Toggle modal visibility
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-    // Handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setNewContact({ ...newContact, [name]: value });
     };
 
-    // Submit new contact to the API
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -55,7 +50,6 @@ const ContactsTable: React.FC = () => {
         }
     };
 
-    // Handle delete contact
     const handleDelete = async (id: string) => {
         try {
             const response = await fetch('/api/contacts', {
@@ -75,6 +69,10 @@ const ContactsTable: React.FC = () => {
         }
     };
 
+    const handleContactClick = (contact: { name: string; information: string }) => {
+        setSelectedContact(contact);
+    };
+
     return (
         <div className="container mx-auto flex flex-col items-center min-h-screen">
             <div className="w-full relative">
@@ -84,25 +82,30 @@ const ContactsTable: React.FC = () => {
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Information</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {contacts.map((contact) => (
                                     <tr key={contact._id}>
-                                        <td>{contact.name}</td>
-                                        <td>{contact.information}</td>
-                                        <td className="p-0">
+                                        <td>
                                             <button
-                                                className="btn btn-sm text-black font-bold flex items-center justify-center"
+                                                onClick={() => handleContactClick(contact)}
+                                                className="text-primary hover:text-primary-focus font-semibold" // DaisyUI colors
+                                            >
+                                                {contact.name}
+                                            </button>
+                                        </td>
+                                        <td className="p-0 text-right">
+                                            <button
+                                                className="btn btn-sm text-black font-bold flex items-center justify-center ml-auto"
                                                 style={{
                                                     backgroundColor: '#941010',
-                                                    width: '2rem',         // Set fixed width
-                                                    height: '2rem',        // Set fixed height to match
-                                                    minWidth: '2rem',      // Ensures the button is square
-                                                    minHeight: '2rem',     // Ensures the button is square
-                                                    padding: 0             // Removes internal padding
+                                                    width: '2rem',
+                                                    height: '2rem',
+                                                    minWidth: '2rem',
+                                                    minHeight: '2rem',
+                                                    padding: 0,
                                                 }}
                                                 onClick={() => handleDelete(contact._id)}
                                             >
@@ -123,6 +126,7 @@ const ContactsTable: React.FC = () => {
                 </div>
             </div>
 
+            {/* Add Contact Modal */}
             {isModalOpen && (
                 <div className="modal modal-open">
                     <div className="modal-box w-11/12 max-w-3xl">
@@ -155,6 +159,21 @@ const ContactsTable: React.FC = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Contact Details Modal */}
+            {selectedContact && (
+                <div className="modal modal-open">
+                    <div className="modal-box">
+                        <h2 className="text-xl font-bold">{selectedContact.name}</h2>
+                        <p className="mt-4">{selectedContact.information}</p>
+                        <div className="modal-action">
+                            <button className="btn" onClick={() => setSelectedContact(null)}>
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
