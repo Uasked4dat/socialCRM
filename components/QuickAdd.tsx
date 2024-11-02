@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PreviewEntries from './PreviewEntries'; // Import the preview component
 
 const QuickAdd: React.FC = () => {
   const [entry, setEntry] = useState<string>('');
   const [contacts, setContacts] = useState([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [structuredResponse, setStructuredResponse] = useState(null); // Store API response
+  const [showPreview, setShowPreview] = useState<boolean>(false); // Toggle preview
 
-  // Fetch all contacts on component load
   useEffect(() => {
     const fetchContacts = async () => {
       try {
@@ -21,32 +24,30 @@ const QuickAdd: React.FC = () => {
   const handleQuickAdd = async () => {
     if (!entry.trim()) return;
   
-    const basePrompt = "Extract the names of people I interacted with and provide a list of facts about a specific person in an array.";
+    const basePrompt = "“Identify the names of people I interacted with and summarize key facts about each person as a list of brief descriptors (e.g., ‘interested in quantum physics’ instead of ‘we talked about quantum physics’). Only include relevant details about interests, personality traits, or notable topics.”";
     const fullPrompt = `${basePrompt}\n\n${entry}`;
   
+    setIsLoading(true);
     try {
       const response = await axios.post('/api/contacts/generate', { prompt: fullPrompt });
-      const structuredResponse = response.data.structuredResponse;
-  
-      for (const person of structuredResponse) {
-        const { name, content: factoids } = person;
-        const newInformation = factoids.join(', ');
-  
-        const existingContact = contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase());
-  
-        await axios.post('/api/contacts', { name, information: newInformation });
-      }
-  
+      setStructuredResponse(response.data.structuredResponse); // Store the API response
+      setShowPreview(true); // Show preview after receiving the response
       setEntry(''); // Clear input after processing
-  
-      // Force a full page reload to refresh contacts
-      window.location.reload();
-  
     } catch (error) {
       console.error('Error adding quick entry:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
-  
+
+  const handleConfirm = (updatedEntries: Array<{ name: string; information: string }>) => {
+    // Handle confirmation and update database with final entries
+    updatedEntries.forEach(async (entry) => {
+      await axios.post('/api/contacts', entry);
+    });
+    setShowPreview(false); // Close preview
+    window.location.reload(); // Refresh the page after saving
+  };
 
   return (
     <div className="container mx-auto flex flex-col items-center min-h-screen">
@@ -61,11 +62,26 @@ const QuickAdd: React.FC = () => {
           <button
             className="btn btn-primary mt-4 self-end"
             onClick={handleQuickAdd}
+            disabled={isLoading}
           >
-            Process Entry
+            {isLoading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : (
+              'Process Entry'
+            )}
           </button>
         </div>
       </div>
+
+      {/* Render PreviewComponent when showPreview is true */}
+      {showPreview && structuredResponse && (
+        <PreviewEntries
+          structuredResponse={structuredResponse}
+          existingContacts={contacts}
+          onClose={() => setShowPreview(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
     </div>
   );
 };
