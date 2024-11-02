@@ -68,13 +68,16 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
         {/* New Entries Section */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-primary mb-3">New Contacts</h3>
-          <div ref={newEntriesRef} className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px]">
+          <div 
+            ref={newEntriesRef} 
+            className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px] max-h-48 overflow-y-auto"
+          >
             {newEntries.length > 0 ? (
               newEntries.map((entry, index) => (
                 <DraggableCard
                   key={`new-${index}`}
                   entry={entry}
-                  existingContacts={existingContacts}  // Pass existingContacts here
+                  existingContacts={existingContacts}
                   onEditName={(newName) => setNewEntries(
                     newEntries.map((e, i) => i === index ? { ...e, name: newName } : e)
                   )}
@@ -89,14 +92,17 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
         {/* Update Existing Section */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-primary mb-3">Update Existing Contacts</h3>
-          <div ref={updateEntriesRef} className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px]">
+          <div 
+            ref={updateEntriesRef} 
+            className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px] max-h-48 overflow-y-auto"
+          >
             {updateEntries.length > 0 ? (
               updateEntries.map((entry, index) => (
                 <DraggableCard
                   key={`update-${index}`}
                   entry={entry}
                   isExisting
-                  existingContacts={existingContacts}  // Pass existingContacts here
+                  existingContacts={existingContacts}
                   onChooseExistingContact={(existingName) => setUpdateEntries(
                     updateEntries.map((e, i) => i === index ? { ...e, name: existingName } : e)
                   )}
