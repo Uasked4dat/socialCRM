@@ -25,7 +25,6 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
   const [, dropNew] = useDrop({
     accept: 'CARD',
     drop: (item: { name: string; content: string[] }) => {
-      // Only add to newEntries if the item isn't already present
       if (!newEntries.some((entry) => entry.name === item.name)) {
         setNewEntries((prevNewEntries) => [...prevNewEntries, item]);
         setUpdateEntries((prevUpdateEntries) =>
@@ -39,7 +38,6 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
   const [, dropUpdate] = useDrop({
     accept: 'CARD',
     drop: (item: { name: string; content: string[] }) => {
-      // Only add to updateEntries if the item isn't already present
       if (!updateEntries.some((entry) => entry.name === item.name)) {
         setUpdateEntries((prevUpdateEntries) => [...prevUpdateEntries, item]);
         setNewEntries((prevNewEntries) =>
@@ -76,6 +74,7 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
                 <DraggableCard
                   key={`new-${index}`}
                   entry={entry}
+                  existingContacts={existingContacts}  // Pass existingContacts here
                   onEditName={(newName) => setNewEntries(
                     newEntries.map((e, i) => i === index ? { ...e, name: newName } : e)
                   )}
@@ -97,6 +96,7 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
                   key={`update-${index}`}
                   entry={entry}
                   isExisting
+                  existingContacts={existingContacts}  // Pass existingContacts here
                   onChooseExistingContact={(existingName) => setUpdateEntries(
                     updateEntries.map((e, i) => i === index ? { ...e, name: existingName } : e)
                   )}
