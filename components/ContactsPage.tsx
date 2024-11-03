@@ -20,7 +20,7 @@ const ContactsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container mx-auto flex flex-col items-center min-h-screen">
+    <div className="w-full flex flex-col items-center min-h-screen">
       <QuickAdd contacts={contacts} fetchContacts={fetchContacts} />
       <ContactsTable contacts={contacts} fetchContacts={fetchContacts} />
     </div>
