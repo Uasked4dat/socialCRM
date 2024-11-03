@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import Select from 'react-select';
 
@@ -28,6 +28,7 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
   onChooseExistingContact,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'CARD',
@@ -38,6 +39,12 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
   }), [entry]);
 
   drag(ref);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [entry]);
 
   const contactOptions = existingContacts.map(contact => ({
     value: contact.name,
@@ -121,6 +128,7 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
           />
         ) : (
           <input
+            ref={inputRef}
             type="text"
             value={entry.name}
             onChange={(e) => {

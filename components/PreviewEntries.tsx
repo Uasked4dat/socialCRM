@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { DraggableCard } from './DraggableCard';
 
@@ -92,16 +92,16 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-      <div className="bg-base-100 rounded-lg shadow-xl p-8 w-full max-w-3xl">
+      <div className="bg-base-100 rounded-lg shadow-xl p-8 w-full max-w-5xl h-full max-h-[90vh] flex flex-col">
         <h2 className="text-2xl font-bold mb-6 text-neutral-content">Review and Confirm Entries</h2>
 
-        <div className="flex space-x-4">
+        <div className="flex-1 flex space-x-4 overflow-hidden">
           {/* New Entries Section */}
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col">
             <h3 className="text-xl font-semibold text-primary mb-3">New Contacts</h3>
             <div
               ref={newEntriesRef}
-              className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px] max-h-48 overflow-y-auto"
+              className="border border-base-300 rounded-lg p-4 bg-base-200 flex-1 overflow-y-auto"
             >
               {newEntries.length > 0 ? (
                 newEntries.map((entry, index) => (
@@ -123,11 +123,11 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({
           </div>
 
           {/* Update Existing Section */}
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col">
             <h3 className="text-xl font-semibold text-primary mb-3">Update Existing Contacts</h3>
             <div
               ref={updateEntriesRef}
-              className="border border-base-300 rounded-lg p-4 bg-base-200 min-h-[100px] max-h-48 overflow-y-auto"
+              className="border border-base-300 rounded-lg p-4 bg-base-200 flex-1 overflow-y-auto"
             >
               {updateEntries.length > 0 ? (
                 updateEntries.map((entry, index) => (
