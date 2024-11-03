@@ -38,38 +38,57 @@ export async function GET() {
 }
 
 // Handle POST requests to add or update a contact
-// Handle POST requests to add or update a contact
 export async function POST(req: NextRequest) {
   try {
-    const { name, information } = await req.json(); // Expect information as a string
+    const body = await req.json();
 
-    if (!name || typeof name !== 'string' || !information || typeof information !== 'string') {
-      return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
-    }
+    // Check if the request is for bulk addition
+    if (Array.isArray(body.entries)) {
+      const entries = body.entries;
 
-    // Connect to MongoDB
-    await connectMongo();
+      // Connect to MongoDB
+      await connectMongo();
 
-    // Check if a contact with the same name already exists
-    let contact = await Contact.findOne({ name });
+      const operations = entries.map((entry: { name: string; information: string }) => ({
+        updateOne: {
+          filter: { name: entry.name },
+          update: { $set: { information: entry.information } },
+          upsert: true,
+        },
+      }));
 
-    if (contact) {
-      // Append new information to existing information
-      contact.information = `${contact.information}, ${information}`;
-      await contact.save();
+      // Perform bulk write operation
+      await Contact.bulkWrite(operations);
+
+      return NextResponse.json({ message: 'Contacts processed successfully' }, { status: 201 });
     } else {
-      // Create a new contact if none exists with this name
-      contact = new Contact({ name, information });
-      await contact.save();
-    }
+      // Single contact addition
+      const { name, information } = body;
 
-    return NextResponse.json({ message: 'Contact processed successfully', contact }, { status: 201 });
+      if (!name || typeof name !== 'string' || !information || typeof information !== 'string') {
+        return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
+      }
+
+      // Connect to MongoDB
+      await connectMongo();
+
+      let contact = await Contact.findOne({ name });
+
+      if (contact) {
+        contact.information = `${contact.information}, ${information}`;
+        await contact.save();
+      } else {
+        contact = new Contact({ name, information });
+        await contact.save();
+      }
+
+      return NextResponse.json({ message: 'Contact processed successfully', contact }, { status: 201 });
+    }
   } catch (error) {
-    console.error('Error adding or updating contact:', error);
+    console.error('Error processing contact(s):', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
-
 
 // Handle DELETE requests to delete a contact by ID
 export async function DELETE(req: NextRequest) {

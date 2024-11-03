@@ -4,12 +4,13 @@ import { DraggableCard } from './DraggableCard';
 
 interface PreviewEntriesProps {
   structuredResponse: Array<{ name: string; content: string[] }>;
-  existingContacts: Array<{ name: string; information: string }>;
   onClose: () => void;
   onConfirm: (updatedEntries: Array<{ name: string; information: string }>) => void;
 }
 
-const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, existingContacts, onClose, onConfirm }) => {
+const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, onClose, onConfirm }) => {
+  const existingContacts: Array<{ name: string }> = []; // Define existingContacts
+
   const [newEntries, setNewEntries] = useState(structuredResponse.filter(
     entry => !existingContacts.some(contact => contact.name.toLowerCase() === entry.name.toLowerCase())
   ));
@@ -55,7 +56,7 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({ structuredResponse, exi
     const allEntries = [...newEntries, ...updateEntries];
     const formattedEntries = allEntries.map(entry => ({
       name: entry.name,
-      information: entry.content.join(', ')
+      information: entry.content.join(', '),
     }));
     onConfirm(formattedEntries);
   };

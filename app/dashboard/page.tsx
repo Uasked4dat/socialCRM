@@ -4,6 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import NavBar from "@/components/NavBar";
 import QuickAdd from "@/components/QuickAdd";
 import ContactsTable from "@/components/ContactsTable";
+import ContactsPage from '@/components/ContactsPage';
 
 export const dynamic = "force-dynamic";
 
@@ -12,14 +13,15 @@ export default function Dashboard() {
     <DndProvider backend={HTML5Backend}>
       <main className="min-h-screen px-6 pb-12">
         <NavBar />
-        <div className="flex flex-row space-x-4">
+        {/* <div className="flex flex-row space-x-4">
           <div className="flex-1">
-            <ContactsTable />
+            <ContactsTable contacts={[]} fetchContacts={() => {}} />
           </div>
           <div className="flex-1">
             <QuickAdd />
           </div>
-        </div>
+        </div> */}
+        <ContactsPage />
       </main>
     </DndProvider>
   );
