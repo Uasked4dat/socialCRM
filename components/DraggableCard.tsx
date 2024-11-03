@@ -2,14 +2,22 @@ import React, { useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import Select from 'react-select';
 
+// Define the Entry interface
+interface Entry {
+  name: string;
+  content: string[];
+}
+
+interface Contact {
+  name: string;
+}
+
 interface DraggableCardProps {
-  entry: { name: string; content: string[] };
+  entry: Entry;
   isExisting?: boolean;
-  existingContacts?: Array<{ name: string }>;
+  existingContacts?: Contact[];
   onEditName?: (newName: string) => void;
   onChooseExistingContact?: (existingName: string) => void;
-  onDropToUpdate?: () => void;
-  onDropToNew?: () => void;
 }
 
 export const DraggableCard: React.FC<DraggableCardProps> = ({
@@ -18,24 +26,16 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
   existingContacts = [],
   onEditName,
   onChooseExistingContact,
-  onDropToUpdate,
-  onDropToNew,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'CARD',
-    item: { name: entry.name, content: entry.content },
-    end: (item, monitor) => {
-      const didDrop = monitor.didDrop();
-      if (didDrop) {
-        isExisting ? onDropToNew?.() : onDropToUpdate?.();
-      }
-    },
+    item: entry, // Pass the entire entry object
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }));
+  }), [entry]);
 
   drag(ref);
 

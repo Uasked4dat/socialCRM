@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PreviewEntries from './PreviewEntries';
 
+// Define the Contact interface
+interface Contact {
+  _id: string;
+  name: string;
+  information: string;
+}
+
 interface QuickAddProps {
+  contacts: Contact[];
   fetchContacts: () => void;
 }
 
-const QuickAdd: React.FC<QuickAddProps> = ({ fetchContacts }) => {
+const QuickAdd: React.FC<QuickAddProps> = ({ contacts, fetchContacts }) => {
   const [entry, setEntry] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -66,6 +74,7 @@ const QuickAdd: React.FC<QuickAddProps> = ({ fetchContacts }) => {
       {showPreview && (
         <PreviewEntries
           structuredResponse={structuredResponse}
+          existingContacts={contacts}
           onClose={() => setShowPreview(false)}
           onConfirm={handleConfirm}
         />

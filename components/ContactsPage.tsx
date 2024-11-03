@@ -21,9 +21,7 @@ const ContactsPage: React.FC = () => {
 
   return (
     <div className="container mx-auto flex flex-col items-center min-h-screen">
-      {/* Pass fetchContacts to QuickAdd */}
-      <QuickAdd fetchContacts={fetchContacts} />
-      {/* Pass contacts and fetchContacts to ContactsTable */}
+      <QuickAdd contacts={contacts} fetchContacts={fetchContacts} />
       <ContactsTable contacts={contacts} fetchContacts={fetchContacts} />
     </div>
   );
