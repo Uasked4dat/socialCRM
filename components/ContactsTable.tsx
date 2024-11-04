@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TrashIcon } from '@heroicons/react/outline';
+import React, { useState, useRef } from 'react';
+import { TrashIcon, PlayIcon, StopIcon } from '@heroicons/react/outline';
 
 interface Contact {
   _id: string;
@@ -14,6 +14,8 @@ interface ContactsTableProps {
 
 const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleDelete = async (id: string) => {
     try {
@@ -35,8 +37,47 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
     }
   };
 
-  const handleContactClick = (contact: Contact) => {
-    setSelectedContact(contact);
+  const handleAudioClick = async (text: string) => {
+    if (isPlaying) {
+      // Stop playback
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlaying(false);
+      }
+    } else {
+      // Start playback
+      try {
+        const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Replace with your actual voice ID
+        const response = await fetch('/api/contacts/speak', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text, voiceId }),
+        });
+
+        if (response.ok) {
+          const audioURL = URL.createObjectURL(await response.blob());
+          if (audioRef.current) {
+            audioRef.current.src = audioURL;
+            await audioRef.current.play();
+            setIsPlaying(true);
+          } else {
+            audioRef.current = new Audio(audioURL);
+            audioRef.current.play();
+            setIsPlaying(true);
+            audioRef.current.onended = () => {
+              setIsPlaying(false);
+            };
+          }
+        } else {
+          console.error('Failed to generate audio');
+        }
+      } catch (error) {
+        console.error('Error generating audio:', error);
+      }
+    }
   };
 
   return (
@@ -55,7 +96,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
                 <tr key={contact._id}>
                   <td>
                     <button
-                      onClick={() => handleContactClick(contact)}
+                      onClick={() => setSelectedContact(contact)}
                       className="text-primary hover:text-primary-focus font-semibold"
                     >
                       {contact.name}
@@ -90,7 +131,23 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
           <div className="modal-box">
             <h2 className="text-xl font-bold">{selectedContact.name}</h2>
             <p className="mt-4">{selectedContact.information}</p>
-            <div className="modal-action">
+            <div className="modal-action flex justify-between">
+              <button
+                className="btn btn-primary flex items-center"
+                onClick={() => handleAudioClick(selectedContact.information)}
+              >
+                {isPlaying ? (
+                  <>
+                    <StopIcon className="h-5 w-5 mr-2" />
+                    Stop Audio
+                  </>
+                ) : (
+                  <>
+                    <PlayIcon className="h-5 w-5 mr-2" />
+                    Generate Audio Summary
+                  </>
+                )}
+              </button>
               <button className="btn" onClick={() => setSelectedContact(null)}>
                 Close
               </button>
