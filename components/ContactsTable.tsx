@@ -15,6 +15,7 @@ interface ContactsTableProps {
 const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleDelete = async (id: string) => {
@@ -47,6 +48,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
       }
     } else {
       // Start playback
+      setIsLoading(true);
       try {
         const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Replace with your actual voice ID
         const response = await fetch('/api/contacts/speak', {
@@ -76,6 +78,8 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
         }
       } catch (error) {
         console.error('Error generating audio:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -135,8 +139,11 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
               <button
                 className="btn btn-primary flex items-center"
                 onClick={() => handleAudioClick(selectedContact.information)}
+                disabled={isLoading}
               >
-                {isPlaying ? (
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-md"></span>
+                ) : isPlaying ? (
                   <>
                     <StopIcon className="h-5 w-5 mr-2" />
                     Stop Audio
