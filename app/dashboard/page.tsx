@@ -13,14 +13,6 @@ export default function Dashboard() {
     <DndProvider backend={HTML5Backend}>
       <main className="min-h-screen px-6 pb-12">
         <NavBar />
-        {/* <div className="flex flex-row space-x-4">
-          <div className="flex-1">
-            <ContactsTable contacts={[]} fetchContacts={() => {}} />
-          </div>
-          <div className="flex-1">
-            <QuickAdd />
-          </div>
-        </div> */}
         <ContactsPage />
       </main>
     </DndProvider>
