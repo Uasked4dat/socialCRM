@@ -18,7 +18,7 @@ const schema = {
       },
       "content": {
         "type": SchemaType.ARRAY,
-        "description": "An array containing factual statements about the person. If there's only one fact, the array should contain exactly one item. Do not add additional facts beyond what is provided. No names should be mentioned",
+        "description": "Don't mention names. An array containing factual statements about the person. If there's only one fact, the array should contain exactly one item. Do not add additional facts beyond what is provided. No names should be mentioned",
         "items": {
           "type": SchemaType.STRING,
           "description": "A concise fact about the person without redundant phrases like 'He/she' or 'The person'. Include all crucial details. Don't include their names.",
@@ -36,7 +36,7 @@ const schema = {
 
 // Configure the model to use the schema and respond in JSON
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro",
+  model: "gemini-1.5-flash",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: schema,
