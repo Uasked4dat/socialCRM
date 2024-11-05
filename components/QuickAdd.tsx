@@ -23,8 +23,8 @@ const QuickAdd: React.FC<QuickAddProps> = ({ contacts, fetchContacts }) => {
   const handleQuickAdd = async () => {
     if (!entry.trim()) return;
 
-    const basePrompt = "Identify names and summarize...";
-    const fullPrompt = `${basePrompt}\n\n${entry}`;
+    const basePrompt = "Identify the names of people and provide an array of associated facts for each person. For each person, return their full name separately and an array of concise facts about them. Each fact should not include the person's name and should avoid redundant phrases like 'He/she' or 'The person'; instead, use direct statements like 'Likes surfing'. If there's only one fact, the array should contain exactly one item. Include all crucial details but do not add any additional facts beyond what is provided.";
+    const fullPrompt = `${entry}`;
 
     setIsLoading(true);
     try {

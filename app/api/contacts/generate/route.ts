@@ -6,37 +6,41 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 // Define a structured schema for extracting names and associated content
 const schema = {
-    description: "List of people with associated facts as an array",
-    type: SchemaType.ARRAY,
-    items: {
-      type: SchemaType.OBJECT,
-      properties: {
-        name: {
-          type: SchemaType.STRING,
-          description: "Name of the person",
-          nullable: false,
-        },
-        content: {
-          type: SchemaType.ARRAY,
-          description: "Array of facts related to the person",
-          items: {
-            type: SchemaType.STRING,
-            description: "An individual fact about the person",
-            nullable: false,
-          },
-        },
+  "type": SchemaType.ARRAY,
+  "description": "A list of people with their associated facts, represented as an array.",
+  "items": {
+    "type": SchemaType.OBJECT,
+    "properties": {
+      "name": {
+        "type": SchemaType.STRING,
+        "description": "The full name of the person. First name only if no last name is provided.",
+        "nullable": false
       },
-      required: ["name", "content"],
+      "content": {
+        "type": SchemaType.ARRAY,
+        "description": "An array containing factual statements about the person. If there's only one fact, the array should contain exactly one item. Do not add additional facts beyond what is provided. No names should be mentioned",
+        "items": {
+          "type": SchemaType.STRING,
+          "description": "A concise fact about the person without redundant phrases like 'He/she' or 'The person'. Include all crucial details. Don't include their names.",
+          "nullable": false
+        }
+      }
     },
-  };
+    "required": [
+      "name",
+      "content"
+    ]
+  }
+};
+
 
 // Configure the model to use the schema and respond in JSON
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-1.5-pro",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: schema,
-    temperature: 0.2
+    temperature: 1
   },
 });
 
