@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 // Define a structured schema for extracting names and associated content
 const schema = {
   "type": SchemaType.ARRAY,
-  "description": "A list of people with their associated facts, represented as an array.",
+  "description": "A list of people with their associated fact(s), represented as an array that has 1 or more elements.",
   "items": {
     "type": SchemaType.OBJECT,
     "properties": {
@@ -18,10 +18,10 @@ const schema = {
       },
       "content": {
         "type": SchemaType.ARRAY,
-        "description": "Don't mention names. An array containing factual statements about the person. If there's only one fact, the array should contain exactly one item. Do not add additional facts beyond what is provided. No names should be mentioned",
+        "description": "An array of discrete factual statement(s) about the person. Each fact should be short, without names, pronouns, or extra phrases. If there's only one fact, the array should contain exactly one item. Do not add punctuation or extraneous details.",
         "items": {
           "type": SchemaType.STRING,
-          "description": "A concise fact about the person without redundant phrases like 'He/she' or 'The person'. Include all crucial details. Don't include their names.",
+          "description": "A concise fact about the person, without any names, pronouns (like 'he/she'), or extra phrases. Example: 'likes skiing'.",
           "nullable": false
         }
       }
@@ -32,6 +32,7 @@ const schema = {
     ]
   }
 };
+
 
 
 // Configure the model to use the schema and respond in JSON
