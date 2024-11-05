@@ -4,14 +4,14 @@ import ButtonAccount from './ButtonAccount';
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-primary-content rounded-lg p-4 mt-6 mb-4">
+    <div className="navbar bg-base-100 shadow-lg rounded-lg mt-6 mb-4">
       <div className="navbar-start">
-        <Link href="/dashboard" className="text-3xl">
-          Dashboard
+        <Link href="/dashboard" className="btn btn-ghost normal-case text-2xl text-primary">
+          Simple Connect
         </Link>
       </div>
-      <div className="navbar-center flex-1">
-        {/* Placeholder for any center-aligned content */}
+      <div className="navbar-center hidden lg:flex">
+        {/* Add any center-aligned items here */}
       </div>
       <div className="navbar-end">
         <ButtonAccount />

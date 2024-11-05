@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { TrashIcon, PlayIcon, StopIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/outline';
 
 interface Contact {
   _id: string;
@@ -22,149 +22,83 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
     try {
       const response = await fetch('/api/contacts', {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
       });
       if (response.ok) {
-        // Refresh contacts after deletion
         fetchContacts();
       } else {
-        console.error('Failed to delete contact');
+        console.error('Error deleting contact');
       }
     } catch (error) {
       console.error('Error deleting contact:', error);
     }
   };
 
-  const handleAudioClick = async (text: string) => {
-    if (isPlaying) {
-      // Stop playback
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        setIsPlaying(false);
-      }
-    } else {
-      // Start playback
-      setIsLoading(true);
-      try {
-        const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Replace with your actual voice ID
-        const response = await fetch('/api/contacts/speak', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ text, voiceId }),
-        });
-
-        if (response.ok) {
-          const audioURL = URL.createObjectURL(await response.blob());
-          if (audioRef.current) {
-            audioRef.current.src = audioURL;
-            await audioRef.current.play();
-            setIsPlaying(true);
-          } else {
-            audioRef.current = new Audio(audioURL);
-            audioRef.current.play();
-            setIsPlaying(true);
-            audioRef.current.onended = () => {
-              setIsPlaying(false);
-            };
-          }
-        } else {
-          console.error('Failed to generate audio');
-        }
-      } catch (error) {
-        console.error('Error generating audio:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
   return (
-    <div className="w-full relative">
-      <div className="bg-base-100 pr-4 pt-4 rounded-xl shadow-lg flex flex-col pb-4">
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {contacts.map((contact) => (
-                <tr key={contact._id}>
-                  <td>
-                    <button
-                      onClick={() => setSelectedContact(contact)}
-                      className="text-primary hover:text-primary-focus font-semibold"
-                    >
-                      {contact.name}
-                    </button>
-                  </td>
-                  <td className="p-0 text-right">
-                    <button
-                      className="btn btn-sm text-black font-bold flex items-center justify-center ml-auto"
-                      style={{
-                        backgroundColor: '#941010',
-                        width: '2rem',
-                        height: '2rem',
-                        minWidth: '2rem',
-                        minHeight: '2rem',
-                        padding: 0,
-                      }}
-                      onClick={() => handleDelete(contact._id)}
-                    >
-                      <TrashIcon className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Contact Details Modal */}
-      {selectedContact && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h2 className="text-xl font-bold">{selectedContact.name}</h2>
-            <ul className="list-disc pl-5 mb-4">
-              {selectedContact.information.split(',').map((fact, index) => (
-                <li key={index}>{fact.trim()}</li>
-              ))}
-            </ul>
-            <div className="modal-action flex justify-between">
-              <button
-                className="btn btn-primary flex items-center"
-                onClick={() => handleAudioClick(selectedContact.information)}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="loading loading-spinner loading-md"></span>
-                ) : isPlaying ? (
-                  <>
-                    <StopIcon className="h-5 w-5 mr-2" />
-                    Stop Audio
-                  </>
-                ) : (
-                  <>
-                    <PlayIcon className="h-5 w-5 mr-2" />
-                    Generate Audio Summary
-                  </>
+    <div className="overflow-x-auto w-full">
+      <table className="table w-full">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Information</th>
+            <th className="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contacts.map((contact) => (
+            <tr key={contact._id}>
+              <td className="whitespace-nowrap">{contact.name}</td>
+              <td>
+                {contact.information.split(',').filter(fact => fact.trim() !== '').slice(0, 2).map((fact, index) => (
+                  <span key={index} className="badge badge-ghost mr-1 mb-1">
+                    {fact.trim()}
+                  </span>
+                ))}
+                {contact.information.split(',').filter(fact => fact.trim() !== '').length > 2 && (
+                  <span className="badge badge-ghost">...</span>
                 )}
-              </button>
-              <button className="btn" onClick={() => setSelectedContact(null)}>
-                Close
-              </button>
+              </td>
+              <td className="text-right">
+                <div className="flex items-center justify-end space-x-2">
+                  <button
+                    className="btn btn-sm btn-outline"
+                    onClick={() => setSelectedContact(contact)}
+                  >
+                    View
+                  </button>
+                  <button
+                    className="btn btn-sm btn-error"
+                    onClick={() => handleDelete(contact._id)}
+                  >
+                    <TrashIcon className="h-5 w-5" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {selectedContact && (
+        <>
+          <input type="checkbox" id="contact-modal" className="modal-toggle" checked readOnly />
+          <div className="modal">
+            <div className="modal-box">
+              <h2 className="font-bold text-xl mb-4">{selectedContact.name}</h2>
+              <ul className="list-disc list-inside mb-4">
+                {selectedContact.information.split(',').filter(fact => fact.trim() !== '').map((fact, index) => (
+                  <li key={index}>{fact.trim()}</li>
+                ))}
+              </ul>
+              <div className="modal-action">
+                <button className="btn" onClick={() => setSelectedContact(null)}>
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

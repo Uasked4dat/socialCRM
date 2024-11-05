@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import PreviewEntries from './PreviewEntries';
 
@@ -42,33 +42,33 @@ const QuickAdd: React.FC<QuickAddProps> = ({ contacts, fetchContacts }) => {
   const handleConfirm = async (updatedEntries: Array<{ name: string; information: string }>) => {
     try {
       await axios.post('/api/contacts', { entries: updatedEntries });
-      setShowPreview(false); // Close preview
-      fetchContacts(); // Refresh contacts after saving
+      setShowPreview(false);
+      fetchContacts();
     } catch (error) {
       console.error('Error saving entries:', error);
     }
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-base-100 rounded-xl shadow-lg p-4 mb-6 flex flex-col">
-        <textarea
-          className="textarea textarea-bordered w-full mb-4 resize-none h-32"
-          placeholder="Quickly add information about a person..."
-          value={entry}
-          onChange={(e) => setEntry(e.target.value)}
-        />
-        <button
-          className="btn btn-primary mt-4 self-end"
-          onClick={handleQuickAdd}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <span className="loading loading-spinner loading-md"></span>
-          ) : (
-            'Process Entry'
-          )}
-        </button>
+    <div className="w-full mb-6">
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body">
+          <textarea
+            className="textarea textarea-bordered w-full h-32 mb-4"
+            placeholder="Quickly add information about a person..."
+            value={entry}
+            onChange={(e) => setEntry(e.target.value)}
+          />
+          <div className="card-actions justify-end">
+            <button
+              className={`btn btn-primary ${isLoading ? 'loading' : ''}`}
+              onClick={handleQuickAdd}
+              disabled={isLoading}
+            >
+              {isLoading ? '' : 'Process Entry'}
+            </button>
+          </div>
+        </div>
       </div>
 
       {showPreview && (
