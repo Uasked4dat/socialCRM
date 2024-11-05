@@ -134,7 +134,11 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
         <div className="modal modal-open">
           <div className="modal-box">
             <h2 className="text-xl font-bold">{selectedContact.name}</h2>
-            <p className="mt-4">{selectedContact.information}</p>
+            <ul className="list-disc pl-5 mb-4">
+              {selectedContact.information.split(',').map((fact, index) => (
+                <li key={index}>{fact.trim()}</li>
+              ))}
+            </ul>
             <div className="modal-action flex justify-between">
               <button
                 className="btn btn-primary flex items-center"

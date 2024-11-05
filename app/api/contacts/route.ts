@@ -52,9 +52,27 @@ export async function POST(req: NextRequest) {
       const operations = entries.map((entry: { name: string; information: string }) => ({
         updateOne: {
           filter: { name: entry.name },
-          update: { $set: { information: entry.information } },
-          upsert: true,
-        },
+          update: [
+            {
+              $set: {
+                information: {
+                  $concat: [
+                    { $ifNull: ["$information", ""] },
+                    {
+                      $cond: [
+                        { $or: [{ $eq: ["$information", null] }, { $eq: ["$information", "" ]}] },
+                        "",
+                        ", "
+                      ]
+                    },
+                    entry.information
+                  ]
+                }
+              }
+            }
+          ],
+          upsert: true
+        }
       }));
 
       // Perform bulk write operation
