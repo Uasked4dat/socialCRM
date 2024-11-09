@@ -155,4 +155,6 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
   );
 };
 
+
 export default ContactsTable;
+
