@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/outline';
 
 interface Contact {
@@ -9,28 +9,39 @@ interface Contact {
 
 interface ContactsTableProps {
   contacts: Contact[];
-  fetchContacts: () => void;
+  setContacts: React.Dispatch<React.SetStateAction<Contact[]>>;
 }
 
-const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }) => {
+const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
 
   const handleDelete = async (id: string) => {
+    // Find the contact to delete
+    const contact = contacts.find(contact => contact._id === id);
+    if (!contact) return;
+
+    // Optimistically update the UI
+    setContacts(prevContacts => prevContacts.filter(contact => contact._id !== id));
+
+    // Close the delete confirmation modal instantly
+    setContactToDelete(null);
+
     try {
       const response = await fetch('/api/contacts', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
       });
-      if (response.ok) {
-        fetchContacts();
-      } else {
+
+      if (!response.ok) {
+        // If deletion failed, revert the UI
+        setContacts(prevContacts => [...prevContacts, contact]);
         console.error('Error deleting contact');
       }
     } catch (error) {
+      // Revert the UI if there's an error
+      setContacts(prevContacts => [...prevContacts, contact]);
       console.error('Error deleting contact:', error);
     }
   };
@@ -50,12 +61,18 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
             <tr key={contact._id}>
               <td className="whitespace-nowrap">{contact.name}</td>
               <td>
-                {contact.information.split(',').filter(fact => fact.trim() !== '').slice(0, 2).map((fact, index) => (
-                  <span key={index} className="badge badge-ghost mr-1 mb-1">
-                    {fact.trim()}
-                  </span>
-                ))}
-                {contact.information.split(',').filter(fact => fact.trim() !== '').length > 2 && (
+                {contact.information
+                  .split(',')
+                  .filter((fact) => fact.trim() !== '')
+                  .slice(0, 2)
+                  .map((fact, index) => (
+                    <span key={index} className="badge badge-ghost mr-1 mb-1">
+                      {fact.trim()}
+                    </span>
+                  ))}
+                {contact.information
+                  .split(',')
+                  .filter((fact) => fact.trim() !== '').length > 2 && (
                   <span className="badge badge-ghost">...</span>
                 )}
               </td>
@@ -69,7 +86,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
                   </button>
                   <button
                     className="btn btn-sm btn-error"
-                    onClick={() => handleDelete(contact._id)}
+                    onClick={() => setContactToDelete(contact)}
                   >
                     <TrashIcon className="h-5 w-5" />
                   </button>
@@ -80,6 +97,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
         </tbody>
       </table>
 
+      {/* View Contact Modal */}
       {selectedContact && (
         <>
           <input type="checkbox" id="contact-modal" className="modal-toggle" checked readOnly />
@@ -87,13 +105,46 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, fetchContacts }
             <div className="modal-box">
               <h2 className="font-bold text-xl mb-4">{selectedContact.name}</h2>
               <ul className="list-disc list-inside mb-4">
-                {selectedContact.information.split(',').filter(fact => fact.trim() !== '').map((fact, index) => (
-                  <li key={index}>{fact.trim()}</li>
-                ))}
+                {selectedContact.information
+                  .split(',')
+                  .filter((fact) => fact.trim() !== '')
+                  .map((fact, index) => (
+                    <li key={index}>{fact.trim()}</li>
+                  ))}
               </ul>
               <div className="modal-action">
                 <button className="btn" onClick={() => setSelectedContact(null)}>
                   Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {contactToDelete && (
+        <>
+          <input type="checkbox" id="delete-modal" className="modal-toggle" checked readOnly />
+          <div className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Confirm Deletion</h3>
+              <p className="py-4">
+                Are you sure you want to permanently delete{' '}
+                <span className="font-semibold">{contactToDelete.name}</span>?
+              </p>
+              <div className="modal-action">
+                <button
+                  className="btn"
+                  onClick={() => setContactToDelete(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-error"
+                  onClick={() => handleDelete(contactToDelete._id)}
+                >
+                  Delete
                 </button>
               </div>
             </div>
