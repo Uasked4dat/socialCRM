@@ -2,9 +2,7 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import NavBar from "@/components/NavBar";
-import QuickAdd from "@/components/QuickAdd";
-import ContactsTable from "@/components/ContactsTable";
-import ContactsPage from '@/components/ContactsPage';
+import ContactsPage from '@/components/CRM';
 
 export const dynamic = "force-dynamic";
 
