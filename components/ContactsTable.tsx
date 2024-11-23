@@ -52,14 +52,21 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
         <thead>
           <tr>
             <th>Name</th>
-            <th>Information</th>
+            <th>Key Information</th>
             <th className="text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           {contacts.map((contact) => (
             <tr key={contact._id}>
-              <td className="whitespace-nowrap">{contact.name}</td>
+              <td className="whitespace-nowrap">
+                <button
+                  className="text-blue-500 hover:underline"
+                  onClick={() => setSelectedContact(contact)}
+                >
+                  {contact.name}
+                </button>
+              </td>
               <td>
                 {contact.information
                   .split(',')
@@ -154,7 +161,6 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
     </div>
   );
 };
-
 
 export default ContactsTable;
 

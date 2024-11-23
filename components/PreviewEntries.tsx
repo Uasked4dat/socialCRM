@@ -94,6 +94,10 @@ const PreviewEntries: React.FC<PreviewEntriesProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
       <div className="bg-base-100 rounded-lg shadow-xl p-8 w-full max-w-5xl h-full max-h-[90vh] flex flex-col">
         <h2 className="text-2xl font-bold mb-6 text-neutral-content">Review and Confirm Entries</h2>
+        {/* subheader that says "Drag and drop entries to the appropriate section" */}
+        <p className="text-sm text-gray-500 mb-4">
+          Drag and drop entries to the appropriate section.
+        </p>
 
         <div className="flex-1 flex space-x-4 overflow-hidden">
           {/* New Entries Section */}
