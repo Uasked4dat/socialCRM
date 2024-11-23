@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectMongo from '@/libs/mongoose';
 import mongoose from 'mongoose';
-import { getServerSession } from 'next-auth'; // Correct import for App Router
+import { getServerSession } from 'next-auth';
 import { authOptions } from '@/libs/next-auth';
 
 // Define a schema for the contact entry
@@ -16,7 +16,7 @@ const contactSchema = new mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model
+    ref: 'User',
     required: true,
   },
   createdAt: {
@@ -33,17 +33,14 @@ export async function GET(req: NextRequest) {
   try {
     await connectMongo();
 
-    // Get the user session
-    const session = await getServerSession(authOptions); // Correct usage
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get the user's ID
     const userId = session.user.id;
 
-    // Fetch contacts belonging to the authenticated user
     const contacts = await Contact.find({ userId }).lean();
 
     return NextResponse.json({ contacts });
@@ -58,19 +55,16 @@ export async function POST(req: NextRequest) {
   try {
     await connectMongo();
 
-    // Get the user session
-    const session = await getServerSession(authOptions); // Correct usage
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get the user's ID
     const userId = session.user.id;
     const body = await req.json();
 
     if (Array.isArray(body.entries)) {
-      // Handle multiple entries
       const entriesWithUser = body.entries.map(
         (entry: { name: string; information: string }) => ({
           ...entry,
@@ -117,7 +111,6 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
     } else {
-      // Handle single contact addition
       const { name, information } = body;
 
       if (
@@ -150,19 +143,51 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Handle DELETE requests to remove a contact for the authenticated user
-export async function DELETE(req: NextRequest) {
+// Handle PUT requests to update a contact for the authenticated user
+export async function PUT(req: NextRequest) {
   try {
     await connectMongo();
 
-    // Get the user session
-    const session = await getServerSession(authOptions); // Correct usage
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get the user's ID
+    const userId = session.user.id;
+    const { _id, information } = await req.json();
+
+    if (!_id || typeof _id !== 'string' || !information || typeof information !== 'string') {
+      return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
+    }
+
+    const contact = await Contact.findOne({ _id, userId });
+
+    if (!contact) {
+      return NextResponse.json({ message: 'Contact not found or not authorized' }, { status: 404 });
+    }
+
+    contact.information = information;
+    await contact.save();
+
+    return NextResponse.json({ message: 'Contact updated successfully', contact });
+  } catch (error) {
+    console.error('Error updating contact:', error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Handle DELETE requests to remove a contact for the authenticated user
+export async function DELETE(req: NextRequest) {
+  try {
+    await connectMongo();
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const userId = session.user.id;
     const { id } = await req.json();
 
@@ -170,14 +195,10 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
     }
 
-    // Delete the contact if it belongs to the authenticated user
     const result = await Contact.deleteOne({ _id: id, userId });
 
     if (result.deletedCount === 0) {
-      return NextResponse.json(
-        { message: 'Contact not found or not authorized' },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'Contact not found or not authorized' }, { status: 404 });
     }
 
     return NextResponse.json({ message: 'Contact deleted successfully' });

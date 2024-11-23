@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Contact {
   _id: string;
@@ -9,10 +9,26 @@ interface Contact {
 interface ViewContactProps {
   contact: Contact | null;
   onClose: () => void;
+  onSave: (updatedContact: Contact) => void;
 }
 
-const ViewContact: React.FC<ViewContactProps> = ({ contact, onClose }) => {
+const ViewContact: React.FC<ViewContactProps> = ({ contact, onClose, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [information, setInformation] = useState(contact?.information || '');
+
+  useEffect(() => {
+    if (contact && isEditing) {
+      setInformation(contact.information);
+    }
+  }, [contact, isEditing]);
+
   if (!contact) return null;
+
+  const handleSave = () => {
+    const updatedContact = { ...contact, information };
+    onSave(updatedContact);
+    setIsEditing(false);
+  };
 
   return (
     <>
@@ -20,18 +36,42 @@ const ViewContact: React.FC<ViewContactProps> = ({ contact, onClose }) => {
       <div className="modal">
         <div className="modal-box">
           <h2 className="font-bold text-xl mb-4">{contact.name}</h2>
-          <ul className="list-disc list-inside mb-4">
-            {contact.information
-              .split(',')
-              .filter((fact) => fact.trim() !== '')
-              .map((fact, index) => (
-                <li key={index}>{fact.trim()}</li>
-              ))}
-          </ul>
+          {isEditing ? (
+            <textarea
+              className="textarea textarea-bordered w-full mb-4"
+              value={information}
+              onChange={(e) => setInformation(e.target.value)}
+            />
+          ) : (
+            <ul className="list-disc list-inside mb-4">
+              {contact.information
+                .split(',')
+                .filter((fact) => fact.trim() !== '')
+                .map((fact, index) => (
+                  <li key={index}>{fact.trim()}</li>
+                ))}
+            </ul>
+          )}
           <div className="modal-action">
-            <button className="btn" onClick={onClose}>
-              Close
-            </button>
+            {isEditing ? (
+              <>
+                <button className="btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
+                <button className="btn btn-primary" onClick={handleSave}>
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn" onClick={() => setIsEditing(true)}>
+                  Edit
+                </button>
+                <button className="btn" onClick={onClose}>
+                  Close
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

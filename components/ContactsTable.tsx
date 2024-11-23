@@ -47,13 +47,40 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
     }
   };
 
+  const handleSave = async (updatedContact: Contact) => {
+    // Optimistically update the contact in the local state
+    setContacts(prevContacts =>
+      prevContacts.map(contact =>
+        contact._id === updatedContact._id ? updatedContact : contact
+      )
+    );
+
+    // Close the modal instantly
+    setSelectedContact(null);
+
+    try {
+      const response = await fetch('/api/contacts', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedContact),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error updating contact');
+      }
+    } catch (error) {
+      console.error('Error updating contact:', error);
+      // Optionally, you can revert the optimistic update if needed
+    }
+  };
+
   return (
     <div className="overflow-x-auto w-full">
       <table className="table w-full">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Key Information</th>
+            <th>Information</th>
             <th className="text-right">Actions</th>
           </tr>
         </thead>
@@ -109,6 +136,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
       <ViewContact
         contact={selectedContact}
         onClose={() => setSelectedContact(null)}
+        onSave={handleSave}
       />
 
       {/* Delete Confirmation Modal */}
