@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ButtonAccount from './ButtonAccount';
+import logo from '@/app/icon.png'; // Ensure the correct path to the logo
 
 const NavBar: React.FC = () => {
   return (
@@ -9,14 +11,23 @@ const NavBar: React.FC = () => {
         className="container flex items-center justify-between px-8 py-4 mx-auto"
         aria-label="Global"
       >
-        {/* Logo on the left */}
-        <div className="flex flex-1">
+        {/* Logo and text on the left */}
+        <div className="flex items-center gap-2">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 text-primary font-extrabold text-lg"
+            className="flex items-center gap-2 font-extrabold text-lg"
             title="Simple Connect Dashboard"
           >
-            Simple Connect
+            <Image
+              src={logo}
+              alt="Simple Connect logo"
+              className="w-8"
+              placeholder="blur"
+              priority={true}
+              width={32}
+              height={32}
+            />
+            <span>Simple Connect</span>
           </Link>
         </div>
 
@@ -26,7 +37,7 @@ const NavBar: React.FC = () => {
         </div>
 
         {/* Account Button on the right */}
-        <div className="flex flex-1 justify-end">
+        <div className="flex justify-end">
           <ButtonAccount />
         </div>
       </nav>
