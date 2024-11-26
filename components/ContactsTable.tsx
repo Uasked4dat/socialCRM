@@ -16,16 +16,22 @@ interface ContactsTableProps {
 const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const itemsPerPage = 5; // Number of items per page
+  const totalPages = Math.ceil(contacts.length / itemsPerPage);
+
+  // Get the current page's contacts
+  const currentContacts = contacts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleDelete = async (id: string) => {
-    // Find the contact to delete
-    const contact = contacts.find(contact => contact._id === id);
+    const contact = contacts.find((contact) => contact._id === id);
     if (!contact) return;
 
-    // Optimistically update the UI
-    setContacts(prevContacts => prevContacts.filter(contact => contact._id !== id));
-
-    // Close the delete confirmation modal instantly
+    setContacts((prevContacts) => prevContacts.filter((contact) => contact._id !== id));
     setContactToDelete(null);
 
     try {
@@ -36,26 +42,21 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
       });
 
       if (!response.ok) {
-        // If deletion failed, revert the UI
-        setContacts(prevContacts => [...prevContacts, contact]);
+        setContacts((prevContacts) => [...prevContacts, contact]);
         console.error('Error deleting contact');
       }
     } catch (error) {
-      // Revert the UI if there's an error
-      setContacts(prevContacts => [...prevContacts, contact]);
+      setContacts((prevContacts) => [...prevContacts, contact]);
       console.error('Error deleting contact:', error);
     }
   };
 
   const handleSave = async (updatedContact: Contact) => {
-    // Optimistically update the contact in the local state
-    setContacts(prevContacts =>
-      prevContacts.map(contact =>
+    setContacts((prevContacts) =>
+      prevContacts.map((contact) =>
         contact._id === updatedContact._id ? updatedContact : contact
       )
     );
-
-    // Close the modal instantly
     setSelectedContact(null);
 
     try {
@@ -70,13 +71,16 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
       }
     } catch (error) {
       console.error('Error updating contact:', error);
-      // Optionally, you can revert the optimistic update if needed
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
     <div className="overflow-x-auto w-full">
-      <table className="table w-full">
+      <table className="table w-full bg-base-100">
         <thead>
           <tr>
             <th>Name</th>
@@ -85,7 +89,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
           </tr>
         </thead>
         <tbody>
-          {contacts.map((contact) => (
+          {currentContacts.map((contact) => (
             <tr key={contact._id}>
               <td className="whitespace-nowrap">
                 <button
@@ -132,6 +136,27 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
         </tbody>
       </table>
 
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          className="btn btn-sm"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="btn btn-sm"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
       {/* View Contact Modal */}
       <ViewContact
         contact={selectedContact}
@@ -173,4 +198,3 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
 };
 
 export default ContactsTable;
-

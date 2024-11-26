@@ -9,9 +9,11 @@ export const dynamic = "force-dynamic";
 export default function Dashboard() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <main className="min-h-screen px-6 pb-12">
+      <main className="min-h-screen bg-base-200">
         <NavBar />
-        <ContactsPage />
+        <div className="container mx-auto">
+          <ContactsPage />
+        </div>
       </main>
     </DndProvider>
   );
