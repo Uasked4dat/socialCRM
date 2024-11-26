@@ -11,9 +11,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@auth/mongodb-adapter": "^1.0.0",
+    "@auth/mongodb-adapter": "^3.7.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@google-cloud/speech": "^6.7.0",
     "@google/generative-ai": "^0.21.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^1.0.6",
@@ -31,6 +32,7 @@
     "dayjs": "^1.11.13",
     "eslint": "^9.13.0",
     "eslint-config-next": "^0.2.4",
+    "express": "^4.21.1",
     "flowbite": "^2.5.1",
     "flowbite-react": "^0.10.1",
     "form-data": "^4.0.0",
@@ -38,6 +40,7 @@
     "mapbox-gl": "^3.5.2",
     "mongodb": "^5.9.2",
     "mongoose": "^8.8.0",
+    "multer": "^1.4.5-lts.1",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
     "next-plausible": "^3.12.0",

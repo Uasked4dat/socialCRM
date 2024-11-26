@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import PreviewEntries from './PreviewEntries';
+import MicrophoneButton from './MicrophoneButton';
 
 // Define the Contact interface
 interface Contact {
@@ -49,6 +50,10 @@ const QuickAdd: React.FC<QuickAddProps> = ({ contacts, fetchContacts }) => {
     }
   };
 
+  const handleTranscription = (transcription: string) => {
+    setEntry(transcription);
+  };
+
   return (
     <div className="w-full mb-6">
       <div className="card bg-base-100 shadow-xl">
@@ -59,7 +64,8 @@ const QuickAdd: React.FC<QuickAddProps> = ({ contacts, fetchContacts }) => {
             value={entry}
             onChange={(e) => setEntry(e.target.value)}
           />
-          <div className="card-actions justify-end">
+          <div className="card-actions justify-between">
+            <MicrophoneButton onTranscription={handleTranscription} />
             <button
               className={`btn btn-primary ${isLoading ? 'loading' : ''}`}
               onClick={handleQuickAdd}
