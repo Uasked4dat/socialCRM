@@ -23,12 +23,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery }) =>
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-
-// Check if the clicked element is inside a Link component
-    if ((event.target as HTMLElement).tagName === 'BUTTON' || (event.target as HTMLElement).closest('button')) {
-        return; // Ignore clicks on buttons
-    }
-
     if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
       handleCollapse();
     }
@@ -48,23 +42,25 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery }) =>
   return (
     <div className="relative">
       <div className={`flex items-center transition-all duration-300 ${isExpanded ? 'w-48' : 'w-8'} min-w-[1.5rem]`}>
-        <input
-          ref={inputRef}
-          type="text"
-          className={`input input-bordered w-full text-sm py-1 px-2 focus:outline-none ${isExpanded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ fontSize: '0.875rem' }} // Tailwind's `text-sm`
-        />
+        {isExpanded && (
+          <input
+            ref={inputRef}
+            type="text"
+            className="input input-bordered w-full text-sm py-1 px-4 focus:outline-none transition-opacity duration-300 h-8"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ fontSize: '0.875rem' }} // Tailwind's `text-sm`
+          />
+        )}
         {isExpanded ? (
           <XIcon
-            className="h-5 w-5 text-gray-500 cursor-pointer ml-1 shrink-0"
+            className="h-6 w-6 text-gray-500 cursor-pointer ml-1 shrink-0"
             onClick={handleCollapse}
           />
         ) : (
           <SearchIcon
-            className="h-5 w-5 text-gray-500 cursor-pointer shrink-0"
+            className="h-6 w-6 text-gray-500 cursor-pointer shrink-0 mx-4 mb-2"
             onClick={handleExpand}
           />
         )}
