@@ -25,15 +25,25 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
+// Create an index on the userId field
+contactSchema.index({ userId: 1 });
+
 // Create a model for the contact entry
 const Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema);
 
 // Handle GET requests to fetch all contacts for the authenticated user
 export async function GET(req: NextRequest) {
+  const start = Date.now();
   try {
+    console.log('Connecting to MongoDB...');
+    const mongoStart = Date.now();
     await connectMongo();
+    console.log(`Connected to MongoDB in ${Date.now() - mongoStart}ms`);
 
+    console.log('Fetching session...');
+    const sessionStart = Date.now();
     const session = await getServerSession(authOptions);
+    console.log(`Fetched session in ${Date.now() - sessionStart}ms`);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -41,21 +51,33 @@ export async function GET(req: NextRequest) {
 
     const userId = session.user.id;
 
+    console.log('Fetching contacts...');
+    const contactsStart = Date.now();
     const contacts = await Contact.find({ userId }).lean();
+    console.log(`Fetched contacts in ${Date.now() - contactsStart}ms`);
 
     return NextResponse.json({ contacts });
   } catch (error) {
     console.error('Error fetching contacts:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } finally {
+    console.log(`Total time: ${Date.now() - start}ms`);
   }
 }
 
 // Handle POST requests to add or update contacts for the authenticated user
 export async function POST(req: NextRequest) {
+  const start = Date.now();
   try {
+    console.log('Connecting to MongoDB...');
+    const mongoStart = Date.now();
     await connectMongo();
+    console.log(`Connected to MongoDB in ${Date.now() - mongoStart}ms`);
 
+    console.log('Fetching session...');
+    const sessionStart = Date.now();
     const session = await getServerSession(authOptions);
+    console.log(`Fetched session in ${Date.now() - sessionStart}ms`);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -140,15 +162,24 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error processing contact(s):', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } finally {
+    console.log(`Total time: ${Date.now() - start}ms`);
   }
 }
 
 // Handle PUT requests to update a contact for the authenticated user
 export async function PUT(req: NextRequest) {
+  const start = Date.now();
   try {
+    console.log('Connecting to MongoDB...');
+    const mongoStart = Date.now();
     await connectMongo();
+    console.log(`Connected to MongoDB in ${Date.now() - mongoStart}ms`);
 
+    console.log('Fetching session...');
+    const sessionStart = Date.now();
     const session = await getServerSession(authOptions);
+    console.log(`Fetched session in ${Date.now() - sessionStart}ms`);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -174,15 +205,24 @@ export async function PUT(req: NextRequest) {
   } catch (error) {
     console.error('Error updating contact:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } finally {
+    console.log(`Total time: ${Date.now() - start}ms`);
   }
 }
 
 // Handle DELETE requests to remove a contact for the authenticated user
 export async function DELETE(req: NextRequest) {
+  const start = Date.now();
   try {
+    console.log('Connecting to MongoDB...');
+    const mongoStart = Date.now();
     await connectMongo();
+    console.log(`Connected to MongoDB in ${Date.now() - mongoStart}ms`);
 
+    console.log('Fetching session...');
+    const sessionStart = Date.now();
     const session = await getServerSession(authOptions);
+    console.log(`Fetched session in ${Date.now() - sessionStart}ms`);
 
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -205,5 +245,7 @@ export async function DELETE(req: NextRequest) {
   } catch (error) {
     console.error('Error deleting contact:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } finally {
+    console.log(`Total time: ${Date.now() - start}ms`);
   }
 }
