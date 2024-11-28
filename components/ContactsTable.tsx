@@ -95,7 +95,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
         <thead>
           <tr>
             <th>Name</th>
-            <th>Information</th>
+            <th className="hidden md:table-cell">Information</th>
             <th className="text-right">Actions</th>
           </tr>
         </thead>
@@ -110,7 +110,7 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
                   {contact.name}
                 </button>
               </td>
-              <td>
+              <td className="hidden md:table-cell">
                 {contact.information
                   .split(',')
                   .filter((fact) => fact.trim() !== '')
