@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/outline';
 import ViewContact from './ViewContact';
+import SearchBar from './SearchBar';
 
 interface Contact {
   _id: string;
@@ -16,13 +17,20 @@ interface ContactsTableProps {
 const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const itemsPerPage = 5; // Number of items per page
   const totalPages = Math.ceil(contacts.length / itemsPerPage);
 
+  // Filter contacts based on search query
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    contact.information.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Get the current page's contacts
-  const currentContacts = contacts.slice(
+  const currentContacts = filteredContacts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -80,6 +88,9 @@ const ContactsTable: React.FC<ContactsTableProps> = ({ contacts, setContacts }) 
 
   return (
     <div className="overflow-x-auto w-full">
+      <div className="mb-1">
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </div>
       <table className="table w-full bg-base-100">
         <thead>
           <tr>
